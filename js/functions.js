@@ -3,7 +3,7 @@ function checkLength (string, length) {
 }
 
 function isPalindrom (string) {
-  let newString = string.replaceAll(' ','').toLowerCase();
+  const newString = string.replaceAll(' ','').toLowerCase();
   let stringToCompare = '';
   for (let i = newString.length - 1; i >= 0 ; i--) {
     stringToCompare += newString[i];
@@ -12,7 +12,7 @@ function isPalindrom (string) {
 }
 
 function parseLine (line) {
-  let string = (typeof line === 'number') ? String(line) : line;
+  const string = (typeof line === 'number') ? String(line) : line;
   let result = '';
   for (let i = 0; i < string.length; i++) {
     if (Number.isNaN(parseInt(string[i], 10)) === false) {
@@ -24,3 +24,7 @@ function parseLine (line) {
   }
   return parseInt(result, 10);
 }
+
+checkLength('проверяемая строка', 18);
+isPalindrom('Лёша на полке клопа нашёл');
+parseLine('1 кефир, 0.5 батона');
