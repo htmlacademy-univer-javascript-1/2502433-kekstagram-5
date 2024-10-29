@@ -1,6 +1,6 @@
 import { isEscapeKey, successMessage, showAlert } from './util.js';
 import { sendData } from './api.js';
-import { validateHashtags, validateComments } from './data-validation.js';
+import { pristine } from './data-validation.js';
 
 const form = document.querySelector('.img-upload__form');
 const uploadFile = form.querySelector('#upload-file');
@@ -38,9 +38,6 @@ const openUploadOverlay = () => {
 uploadFile.addEventListener('change', openUploadOverlay);
 uploadCloseButton.addEventListener('click', closeUploadOverlay);
 
-validateHashtags();
-validateComments();
-
 const blockSubmitButton = () => {
   submitButton.disabled = true;
   submitButton.textContent = 'Отправляю...';
@@ -60,10 +57,13 @@ const onSendDataError = () => {
   showAlert('Не удалось загрузить фотографию');
 };
 
-const onFormSubmit = () => {
-  blockSubmitButton();
-  sendData(onSendDataSuccess, onSendDataError, new FormData(form));
-  unblockSubmitButton();
+const onFormSubmit = (evt) => {
+  evt.preventDefault();
+  if (pristine.validate()) {
+    blockSubmitButton();
+    sendData(onSendDataSuccess, onSendDataError, new FormData(form));
+    unblockSubmitButton();
+  }
 };
 
 form.addEventListener('submit', onFormSubmit);
