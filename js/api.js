@@ -14,7 +14,7 @@ const getData = (onSuccess) => {
     });
 };
 
-const sendData = (onSuccess, body) => {
+const sendData = (onSuccess, openSendDataErrorMessage, body) => {
   fetch('https://29.javascript.htmlacademy.pro/kekstagram',
     {
       method: 'POST',
@@ -28,7 +28,7 @@ const sendData = (onSuccess, body) => {
       onSuccess();
     })
     .catch(() => {
-      showAlert('Не удалось отправить фото');
+      openSendDataErrorMessage();
     });
 };
 

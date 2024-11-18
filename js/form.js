@@ -1,4 +1,4 @@
-import { isEscapeKey, successMessage } from './util.js';
+import { isEscapeKey, successMessage, openSendDataErrorMessage } from './util.js';
 import { sendData } from './api.js';
 import { pristine } from './data-validation.js';
 import { resetImage } from './picture-editing.js';
@@ -61,9 +61,11 @@ const onFormSubmit = (evt) => {
   evt.preventDefault();
   if (pristine.validate()) {
     blockSubmitButton();
-    sendData(onSendDataSuccess, new FormData(form));
+    sendData(onSendDataSuccess, openSendDataErrorMessage, new FormData(form));
     unblockSubmitButton();
   }
 };
 
 form.addEventListener('submit', onFormSubmit);
+
+export { onEscKeydown };
