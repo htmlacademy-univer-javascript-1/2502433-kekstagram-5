@@ -1,35 +1,37 @@
 import { showAlert } from './util.js';
 
-const getData = (onSuccess) => {
-  fetch('https://29.javascript.htmlacademy.pro/kekstagram/data')
-    .then((response) => response.json())
-    .then((posts) => {
-      if (!posts) {
-        throw new Error();
-      }
-      onSuccess(posts);
-    })
-    .catch(() => {
-      showAlert('Не удалось загрузить данные с сервера');
-    });
+const Urls = {
+  GET: 'https://29.javascript.htmlacademy.pro/kekstagram/data',
+  POST: 'https://29.javascript.htmlacademy.pro/kekstagram',
 };
 
-const sendData = (onSuccess, openSendDataErrorMessage, body) => {
-  fetch('https://29.javascript.htmlacademy.pro/kekstagram',
+const sendRequest = (onSuccess, method, body, onFail) => {
+  fetch(
+    Urls[method],
     {
-      method: 'POST',
-      body,
-    },
+      method: method,
+      body: body,
+    }
   )
     .then((response) => {
-      if(!response.ok) {
+      if (!response.ok) {
         throw new Error();
       }
-      onSuccess();
+      return response.json();
+    })
+    .then((data) => {
+      onSuccess(data);
     })
     .catch(() => {
-      openSendDataErrorMessage();
+      if (method === 'GET') {
+        showAlert('Не удалось загрузить данные с сервера');
+      } else {
+        onFail();
+      }
     });
 };
 
-export { getData, sendData };
+const loadData = (onSuccess, method = 'GET') => sendRequest(onSuccess, method);
+const uploadData = (onSuccess, method, body, onFail) => sendRequest(onSuccess, method, body, onFail);
+
+export {loadData, uploadData};
