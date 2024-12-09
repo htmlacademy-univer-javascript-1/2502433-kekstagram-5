@@ -29,24 +29,24 @@ const renderSimilarPhotos = (similarPhotos, compareFunction, photosAmount) => {
       listPhotoFragment.appendChild(photoElement);
     });
   filterBlock.classList.remove('img-filters--inactive');
-  if (allPhotos[0]) {
-    allPhotos.forEach((photo) => photo.remove());
-  }
+  allPhotos?.forEach((photo) => photo.remove());
   containerPhotoMiniature.appendChild(listPhotoFragment);
 };
 
-const filterDefaultElement = filterBlock.querySelector('#filter-default');
-const filterRandomElement = filterBlock.querySelector('#filter-random');
-const filterPopularElement = filterBlock.querySelector('#filter-discussed');
 const form = filterBlock.querySelector('.img-filters__form');
 
+const filterFunctions = {
+  default: renderSimilarPhotos,
+  random: (photos) => renderSimilarPhotos(photos, compareRandom, PHOTO_RANDOM_AMOUNT),
+  discussed: (photos) => renderSimilarPhotos(photos, compareComments),
+};
+
 const renderSortedPhotos = (photos) => {
-  if (filterDefaultElement.classList.contains('img-filters__button--active')) {
-    renderSimilarPhotos(photos);
-  } else if (filterRandomElement.classList.contains('img-filters__button--active')) {
-    renderSimilarPhotos(photos, compareRandom, PHOTO_RANDOM_AMOUNT);
-  } else if (filterPopularElement.classList.contains('img-filters__button--active')) {
-    renderSimilarPhotos(photos, compareComments);
+  const activeFilter = filterBlock.querySelector('.img-filters__button--active');
+  const filterType = activeFilter ? activeFilter.id.replace('filter-', '') : 'default';
+  const filterFunction = filterFunctions[filterType];
+  if (filterFunction) {
+    filterFunction(photos);
   }
 };
 
