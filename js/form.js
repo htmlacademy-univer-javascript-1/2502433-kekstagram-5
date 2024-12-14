@@ -1,4 +1,4 @@
-import { isEscapeKey, successMessage, openSendDataErrorMessage } from './util.js';
+import { isEscapeKey, openSuccessMessage, openSendDataErrorMessage } from './util.js';
 import { uploadData } from './api.js';
 import { pristine } from './data-validation.js';
 import { resetImage } from './picture-editing.js';
@@ -54,7 +54,7 @@ const unblockSubmitButton = () => {
 const onSendDataSuccess = () => {
   closeUploadOverlay();
   resetImage();
-  successMessage();
+  openSuccessMessage();
 };
 
 const onFormSubmit = (evt) => {
