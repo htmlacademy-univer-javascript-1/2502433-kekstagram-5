@@ -52,6 +52,7 @@ const EFFECTS = [
   },
 ];
 
+const DEFAULT_EFFECT = EFFECTS[0];
 const scaleInput = document.querySelector('.scale__control--value');
 const smallerButton = document.querySelector('.scale__control--smaller');
 const biggerButton = document.querySelector('.scale__control--bigger');
@@ -60,7 +61,6 @@ const slider = document.querySelector('.effect-level__slider');
 const form = document.querySelector('.img-upload__form');
 const effectLevel = form.querySelector('.img-upload__effect-level');
 
-const DEFAULT_EFFECT = EFFECTS[0];
 let chosenEffect = DEFAULT_EFFECT;
 const isDefaultEffect = () => chosenEffect === DEFAULT_EFFECT;
 const resetEffect = () => {
