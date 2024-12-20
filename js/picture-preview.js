@@ -1,7 +1,7 @@
 const FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
 
 const fileChooser = document.querySelector('#upload-file');
-const photoPreview = document.querySelector('.img-upload__overlay img');
+const photoPreview = document.querySelector('.img-upload__preview img');
 const effectsPreview = document.querySelectorAll('.effects__preview');
 
 fileChooser.addEventListener('change', () => {

@@ -56,16 +56,16 @@ const DEFAULT_EFFECT = EFFECTS[0];
 const scaleInput = document.querySelector('.scale__control--value');
 const smallerButton = document.querySelector('.scale__control--smaller');
 const biggerButton = document.querySelector('.scale__control--bigger');
-const image = document.querySelector('.img-upload__preview');
+const image = document.querySelector('.img-upload__preview img');
 const slider = document.querySelector('.effect-level__slider');
 const form = document.querySelector('.img-upload__form');
 const effectLevel = form.querySelector('.img-upload__effect-level');
+const effectLevelValue = document.querySelector('.effect-level__value');
 
 let chosenEffect = DEFAULT_EFFECT;
 const isDefaultEffect = () => chosenEffect === DEFAULT_EFFECT;
 const resetEffect = () => {
   image.style.filter = 'none';
-  image.className = '';
 };
 
 effectLevel.classList.add('visually-hidden');
@@ -93,6 +93,7 @@ const updateSlider = (effect = DEFAULT_EFFECT) => {
   if (isDefaultEffect()) {
     effectLevel.classList.add('visually-hidden');
   }
+  effectLevelValue.value = effect.max;
 };
 
 const onFormChange = (evt) => {
@@ -106,8 +107,8 @@ const onFormChange = (evt) => {
 const onSliderUpdate = () => {
   resetEffect();
   const effectValue = slider.noUiSlider.get();
-  image.classList.add(`effects__preview--${chosenEffect.name}`);
   image.style.filter = `${chosenEffect.style}(${effectValue}${chosenEffect.unit})`;
+  effectLevelValue.value = parseFloat(effectValue);
 };
 
 slider.noUiSlider.on('update', onSliderUpdate);
@@ -118,25 +119,24 @@ const scaleImage = (value = DEFAULT_SCALE) => {
   scaleInput.value = `${value}%`;
 };
 
-const onSmallerButtonClick = () => {
+const onScaleButtonClick = (isBigger) => {
   const currentValue = parseInt(scaleInput.value, 10);
-  const newValue = currentValue - SCALE_STEP;
-  if (newValue >= MIN_SCALE) {
+  const newValue = isBigger ? currentValue + SCALE_STEP : currentValue - SCALE_STEP;
+  if ((isBigger && newValue <= DEFAULT_SCALE) || (!isBigger && newValue >= MIN_SCALE)) {
     scaleImage(newValue);
+    smallerButton.removeAttribute('disabled');
+    biggerButton.removeAttribute('disabled');
   } else {
-    smallerButton.setAttribute('disabled');
+    if (isBigger) {
+      biggerButton.setAttribute('disabled', true);
+    } else {
+      smallerButton.setAttribute('disabled', true);
+    }
   }
 };
 
-const onBiggerButtonClick = () => {
-  const currentValue = parseInt(scaleInput.value, 10);
-  const newValue = currentValue + SCALE_STEP;
-  if (newValue <= DEFAULT_SCALE) {
-    scaleImage(newValue);
-  } else {
-    biggerButton.setAttribute('disabled');
-  }
-};
+const onSmallerButtonClick = () => onScaleButtonClick(false);
+const onBiggerButtonClick = () => onScaleButtonClick(true);
 
 smallerButton.addEventListener('click', onSmallerButtonClick);
 biggerButton.addEventListener('click', onBiggerButtonClick);

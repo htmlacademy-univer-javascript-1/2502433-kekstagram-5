@@ -39,7 +39,7 @@ const validateHashtags = (value) => {
     if (tag.length > MAX_HASHTAG_LENGTH) {
       return { isValid: false, message: `Хэштег не может превышать ${MAX_HASHTAG_LENGTH} символов` };
     }
-    if (!/^\w+$/.test(tag.slice(1)) || tag.includes('_')) {
+    if (!/^[\wА-Яа-яЁё]+$/.test(tag.slice(1)) || tag.includes('_')) {
       return { isValid: false, message: 'Символы в хэштеге могут быть только буквами и цифрами' };
     }
   }

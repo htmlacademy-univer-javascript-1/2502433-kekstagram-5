@@ -2,12 +2,11 @@ import { renderPhotos } from './pictures.js';
 
 const PHOTO_RANDOM_AMOUNT = 10;
 const filterBlock = document.querySelector('.img-filters');
+const form = filterBlock.querySelector('.img-filters__form');
 
 const compareComments = (photoA, photoB) => (photoB.comments.length - photoA.comments.length);
 
 const compareRandom = () => Math.random() - 0.5;
-
-const form = filterBlock.querySelector('.img-filters__form');
 
 const filterFunctions = {
   default: renderPhotos,
