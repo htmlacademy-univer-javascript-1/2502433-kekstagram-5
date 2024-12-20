@@ -1,5 +1,5 @@
-import { isEscapeKey, successMessage, openSendDataErrorMessage } from './util.js';
-import { uploadData } from './api.js';
+import { isEscapeKey, openSuccessMessage, openSendDataErrorMessage } from './util.js';
+import { postData } from './api.js';
 import { pristine } from './data-validation.js';
 import { resetImage } from './picture-editing.js';
 
@@ -41,28 +41,17 @@ const openUploadOverlay = () => {
 uploadFile.addEventListener('change', openUploadOverlay);
 uploadCloseButton.addEventListener('click', closeUploadOverlay);
 
-const blockSubmitButton = () => {
-  submitButton.disabled = true;
-  submitButton.textContent = 'Отправляю...';
-};
-
-const unblockSubmitButton = () => {
-  submitButton.disabled = false;
-  submitButton.textContent = 'Опубликовать';
-};
-
 const onSendDataSuccess = () => {
   closeUploadOverlay();
   resetImage();
-  successMessage();
+  openSuccessMessage();
 };
 
 const onFormSubmit = (evt) => {
   evt.preventDefault();
   if (pristine.validate()) {
-    blockSubmitButton();
-    uploadData(onSendDataSuccess, 'POST', new FormData(form), openSendDataErrorMessage);
-    unblockSubmitButton();
+    submitButton.disabled = true;
+    postData(onSendDataSuccess, 'POST', new FormData(form), openSendDataErrorMessage);
   }
 };
 

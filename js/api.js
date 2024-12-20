@@ -31,7 +31,7 @@ const sendRequest = (onSuccess, method, body, onFail) => {
     });
 };
 
-const loadData = (onSuccess, method = 'GET') => sendRequest(onSuccess, method);
-const uploadData = (onSuccess, method, body, onFail) => sendRequest(onSuccess, method, body, onFail);
+const getData = (onSuccess, method = 'GET') => sendRequest(onSuccess, method);
+const postData = (onSuccess, method, body, onFail) => sendRequest(onSuccess, method, body, onFail);
 
-export {loadData, uploadData};
+export {getData, postData};

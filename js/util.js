@@ -1,34 +1,11 @@
 import { onEscKeydown } from './form.js';
 
-const ALERT_SHOW_TIME = 5000;
+const ALERT_SHOW_TIME = 55000;
+const submitButton = document.querySelector('.img-upload__submit');
 const successTemplate = document.querySelector('#success').content.querySelector('.success');
 const successButton = successTemplate.querySelector('.success__button');
-const blockSendError = document.querySelector('#error').content.querySelector('.error');
-const errorMessage = blockSendError.cloneNode(true);
-const errorMessageCloseElement = errorMessage.querySelector('.error__button');
-
-const getRandomInteger = (min, max) => Math.floor(Math.random() * (max - min + 1) + min);
-
-const createUniqueRandomNumberList = (min, max, length) => {
-  const previousNumbers = [];
-  while (previousNumbers.length < length) {
-    let currentValue = getRandomInteger(min, max);
-    while (previousNumbers.includes(currentValue)) {
-      currentValue = getRandomInteger(min, max);
-    }
-    previousNumbers.push(currentValue);
-  }
-  return previousNumbers;
-};
-
-const getUniqueNumber = (list, usedNumbers) => {
-  for (let i = 0; i < list.length; i++){
-    if (usedNumbers.includes(list[i]) === false){
-      usedNumbers.push(list[i]);
-      return list[i];
-    }
-  }
-};
+const errorTemplate = document.querySelector('#error').content.querySelector('.error');
+const errorMessageCloseElement = errorTemplate.querySelector('.error__button');
 
 const isEscapeKey = (evt) => evt.key === 'Escape';
 
@@ -45,6 +22,7 @@ const showAlert = (message) => {
 
   alertContainer.textContent = message;
   document.body.append(alertContainer);
+  alertContainer.classList.add('data-error');
 
   setTimeout(() => {
     alertContainer.remove();
@@ -68,48 +46,45 @@ const onSuccessClickEmpty = (evt) => {
   }
 };
 
-const successMessage = () => {
-  const fragment = document.createDocumentFragment();
-  fragment.append(successTemplate);
-  document.body.append(fragment);
+const openSuccessMessage = () => {
+  document.body.append(successTemplate);
   successButton.addEventListener('click', onSuccessButtonCLick);
   document.addEventListener('keydown', onSuccessEscKeydown);
   document.addEventListener('click', onSuccessClickEmpty);
+  submitButton.disabled = false;
 };
 
-errorMessage.classList.add('hidden');
-document.body.appendChild(errorMessage);
-
-const onPopupErrorEscKeydown = (evt) => {
+const onErrorEscKeydown = (evt) => {
   if (isEscapeKey(evt)) {
     evt.preventDefault();
     closeSendDataErrorMessage();
   }
 };
 
-const onPopupErrorClickClose = () => {
+const onErrorButtonClick = () => {
   closeSendDataErrorMessage();
 };
 
-const onPopupErrorClickEmpty = (evt) => {
+const onErrorClickEmpty = (evt) => {
   if (!(evt.target.closest('.error__inner'))) {
     closeSendDataErrorMessage();
   }
 };
 
 const openSendDataErrorMessage = () => {
-  errorMessage.classList.remove('hidden');
-  document.addEventListener('keydown', onPopupErrorEscKeydown);
-  errorMessageCloseElement.addEventListener('click', onPopupErrorClickClose);
-  document.addEventListener('click', onPopupErrorClickEmpty);
+  document.body.append(errorTemplate);
+  document.addEventListener('keydown', onErrorEscKeydown);
+  errorMessageCloseElement.addEventListener('click', onErrorButtonClick);
+  document.addEventListener('click', onErrorClickEmpty);
   document.removeEventListener('keydown', onEscKeydown);
+  submitButton.disabled = false;
 };
 
 function closeSendDataErrorMessage() {
-  errorMessage.classList.add('hidden');
-  document.removeEventListener('keydown', onPopupErrorEscKeydown);
-  errorMessageCloseElement.removeEventListener('click', onPopupErrorClickClose);
-  document.removeEventListener('click', onPopupErrorClickEmpty);
+  document.querySelector('.error').remove();
+  document.removeEventListener('keydown', onErrorEscKeydown);
+  errorMessageCloseElement.removeEventListener('click', onErrorButtonClick);
+  document.removeEventListener('click', onErrorClickEmpty);
   document.addEventListener('keydown', onEscKeydown);
 }
 
@@ -129,11 +104,8 @@ function debounce (callback, timeoutDelay = 500) {
 }
 
 export {
-  getRandomInteger,
-  createUniqueRandomNumberList,
-  getUniqueNumber,
   isEscapeKey,
-  successMessage,
+  openSuccessMessage,
   openSendDataErrorMessage,
   showAlert,
   debounce,
